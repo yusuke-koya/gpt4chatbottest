@@ -1,0 +1,19 @@
+{
+  "name": "gpt4chatbottest",
+  "version": "1.0.0",
+  "description": "\"# gpt4chatbottest\"",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/yusuke-koya/gpt4chatbottest.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/yusuke-koya/gpt4chatbottest/issues"
+  },
+  "homepage": "https://github.com/yusuke-koya/gpt4chatbottest#readme"
+}
