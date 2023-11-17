@@ -240,7 +240,7 @@ async function downloadBlobString(connectionString, containerName, fileName) {
         const downloaded = await streamToBuffer(downloadResponse.readableStreamBody);
         return downloaded.toString();
     }
-    
+
     async function streamToBuffer(readableStream) {
         return new Promise((resolve, reject) => {
             const chunks = [];
@@ -253,7 +253,7 @@ async function downloadBlobString(connectionString, containerName, fileName) {
             readableStream.on('error', reject);
         });
     }
-    
+
   } catch (err) {
     console.error(`Error: ${err.message}`);
   }
