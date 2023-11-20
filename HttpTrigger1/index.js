@@ -62,7 +62,6 @@ const createCompletion = async (messages, context) => {
 };
 
 module.exports = async function (context, req) {
-  try{
   // Ignore retry requests
   if (req.headers["x-slack-retry-num"]) {
     context.log("Ignoring Retry request: " + req.headers["x-slack-retry-num"]);
@@ -188,13 +187,6 @@ module.exports = async function (context, req) {
   context.res = {
     status: 200,
   };
-  }catch(err){
-    context.log.error('****** error has occured ******');
-    context.log.error(err);
-    context.res = {
-      body: err
-    }
-  }
 };
 
 // NGワードが含まれるか
