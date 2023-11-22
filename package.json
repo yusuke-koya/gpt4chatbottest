@@ -15,5 +15,10 @@
   "bugs": {
     "url": "https://github.com/yusuke-koya/gpt4chatbottest/issues"
   },
-  "homepage": "https://github.com/yusuke-koya/gpt4chatbottest#readme"
+  "homepage": "https://github.com/yusuke-koya/gpt4chatbottest#readme",
+  "dependencies": {
+    "@azure/storage-blob": "^12.17.0",
+    "@slack/web-api": "^6.10.0",
+    "openai": "^3.3.0"
+  }
 }
