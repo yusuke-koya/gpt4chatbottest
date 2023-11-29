@@ -4,14 +4,15 @@ const {
   ChatCompletionRequestMessageRoleEnum
 } = require("openai");
 
-const azureIdentity = require("@azure/identity");
-const appConfig = require("@azure/app-configuration");
+const { AppConfigurationClient } = require("@azure/app-configuration");
+const { DefaultAzureCredential, AzureAuthorityHosts } = require("@azure/identity");
 
-const credential = new azureIdentity.DefaultAzureCredential();
-const openaiClient = new appConfig.AppConfigurationClient(
+// Create an AppConfigurationClient that will authenticate through AAD in the China cloud
+const client = new AppConfigurationClient(
   "https://exa-dpf.openai.azure.com",
-  credential
+  new DefaultAzureCredential({ authorityHost: AzureAuthorityHosts.AzurePublicCloud })
 );
+
 const slackClient = new WebClient(process.env.SLACK_BOT_TOKEN);
 const CHAT_GPT_SYSTEM_PROMPT = process.env.CHAT_GPT_SYSTEM_PROMPT;
 const GPT_THREAD_MAX_COUNT = process.env.GPT_THREAD_MAX_COUNT;
