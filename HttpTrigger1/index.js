@@ -1,18 +1,23 @@
 const { BlobServiceClient } = require("@azure/storage-blob");
 const { WebClient } = require("@slack/web-api");
 const {
-  ChatCompletionRequestMessageRoleEnum
+  ChatCompletionRequestMessageRoleEnum,
+  Configuration,
+  OpenAIApi,
 } = require("openai");
 
-const { AppConfigurationClient } = require("@azure/app-configuration");
-const { DefaultAzureCredential, AzureAuthorityHosts } = require("@azure/identity");
-
-// Create an AppConfigurationClient that will authenticate through AAD in the China cloud
-const client = new AppConfigurationClient(
-  "https://exa-dpf.openai.azure.com",
-  new DefaultAzureCredential({ authorityHost: AzureAuthorityHosts.AzurePublicCloud })
+const openaiClient = new OpenAIApi(
+  new Configuration({
+    apiKey: process.env.OPENAI_API_KEY,
+    basePath: process.env.OPENAI_API_URL + 'openai/deployments/' + process.env.OPENAI_DEPLOY_NAME,
+    baseOptions: {
+      headers: {'api-key': process.env.OPENAI_API_KEY},
+      params: {
+        'api-version': '2023-03-15-preview'
+      }
+    }
+  })
 );
-
 const slackClient = new WebClient(process.env.SLACK_BOT_TOKEN);
 const CHAT_GPT_SYSTEM_PROMPT = process.env.CHAT_GPT_SYSTEM_PROMPT;
 const GPT_THREAD_MAX_COUNT = process.env.GPT_THREAD_MAX_COUNT;
