@@ -6,15 +6,6 @@ const {
   OpenAIApi,
 } = require("openai");
 
-const azureIdentity = require("@azure/identity");
-const appConfig = require("@azure/app-configuration");
-
-const credential = new azureIdentity.DefaultAzureCredential();
-const client = new appConfig.AppConfigurationClient(
-  "https://exa-dpf.openai.azure.com/", // ex: <https://<your appconfig resource>.azconfig.io>
-  credential
-);
-
 const openaiClient = new OpenAIApi(
   new Configuration({
     apiKey: process.env.OPENAI_API_KEY,
@@ -71,11 +62,6 @@ const createCompletion = async (messages, context) => {
 };
 
 module.exports = async function (context, req) {
-  context.log("******");
-  context.log(client);
-  context.log(openaiClient);
-  context.log("******");
-
   // Ignore retry requests
   if (req.headers["x-slack-retry-num"]) {
     context.log("Ignoring Retry request: " + req.headers["x-slack-retry-num"]);
