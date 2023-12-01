@@ -8,7 +8,7 @@ const {
 
 const openaiClient = new OpenAIApi(
   new Configuration({
-    basePath: "https://exa-dpf.openai.azure.com/"
+    basePath: "https://exa-dpf-bee7dtd5frb4eggd.z01.azurefd.net/intrabot/webhook"
   })
 );
 const slackClient = new WebClient(process.env.SLACK_BOT_TOKEN);
