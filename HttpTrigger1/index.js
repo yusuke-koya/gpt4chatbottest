@@ -48,7 +48,7 @@ const postMessage = async (channel, text, threadTs, context) => {
  */
 const createCompletion = async (messages, context) => {
   try {
-    const endpoint = "https://exa-dpf.openai.azure.com/";
+    const endpoint = "https://exa-dpf-bee7dtd5frb4eggd.z01.azurefd.net/intrabot/webhook";
     const client = new OpenAIClient(endpoint, new DefaultAzureCredential());
     const deploymentId = "gpt-35-turbo";
     const events = client.listChatCompletions(deploymentId, messages, { maxTokens: 128 });
