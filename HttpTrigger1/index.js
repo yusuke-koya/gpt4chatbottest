@@ -8,14 +8,7 @@ const {
 
 const openaiClient = new OpenAIApi(
   new Configuration({
-    apiKey: process.env.OPENAI_API_KEY,
-    basePath: process.env.OPENAI_API_URL + 'openai/deployments/' + process.env.OPENAI_DEPLOY_NAME,
-    baseOptions: {
-      headers: {'api-key': process.env.OPENAI_API_KEY},
-      params: {
-        'api-version': '2023-03-15-preview'
-      }
-    }
+    basePath: "https://exa-dpf.openai.azure.com/"
   })
 );
 const slackClient = new WebClient(process.env.SLACK_BOT_TOKEN);
