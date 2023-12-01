@@ -17,8 +17,8 @@
   },
   "homepage": "https://github.com/yusuke-koya/gpt4chatbottest#readme",
   "dependencies": {
+    "@azure/app-configuration": "^1.5.0",
     "@azure/identity": "^4.0.0",
-    "@azure/openai": "^1.0.0-beta.7",
     "@azure/storage-blob": "^12.17.0",
     "@slack/web-api": "^6.10.0",
     "openai": "^3.3.0"

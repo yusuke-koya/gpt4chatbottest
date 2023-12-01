@@ -5,8 +5,15 @@ const {
   Configuration,
   OpenAIApi,
 } = require("openai");
-const { OpenAIClient } = require("@azure/openai");
-const { DefaultAzureCredential } = require("@azure/identity");
+
+const azureIdentity = require("@azure/identity");
+const appConfig = require("@azure/app-configuration");
+
+const credential = new azureIdentity.DefaultAzureCredential();
+const client = new appConfig.AppConfigurationClient(
+  "https://exa-dpf.openai.azure.com/", // ex: <https://<your appconfig resource>.azconfig.io>
+  credential
+);
 
 const openaiClient = new OpenAIApi(
   new Configuration({
@@ -48,20 +55,6 @@ const postMessage = async (channel, text, threadTs, context) => {
  */
 const createCompletion = async (messages, context) => {
   try {
-    const endpoint = "https://exa-dpf-bee7dtd5frb4eggd.z01.azurefd.net/exesbot/webhook";
-    const client = new OpenAIClient(endpoint, new DefaultAzureCredential());
-    const deploymentId = "gpt-35-turbo";
-    const events = client.listChatCompletions(deploymentId, messages, { maxTokens: 128 });
-    for await (const event of events) {
-      for (const choice of event.choices) {
-        const delta = choice.delta?.content;
-        if (delta !== undefined) {
-          context.log(`Chatbot: ${delta}`);
-        }
-      }
-    }
-
-
     const response = await openaiClient.createChatCompletion({
       messages: messages,
       max_tokens: 800,
@@ -78,6 +71,11 @@ const createCompletion = async (messages, context) => {
 };
 
 module.exports = async function (context, req) {
+  context.log("******");
+  context.log(client);
+  context.log(openaiClient);
+  context.log("******");
+
   // Ignore retry requests
   if (req.headers["x-slack-retry-num"]) {
     context.log("Ignoring Retry request: " + req.headers["x-slack-retry-num"]);
