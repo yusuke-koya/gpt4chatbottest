@@ -5,6 +5,8 @@ const {
   Configuration,
   OpenAIApi,
 } = require("openai");
+const { OpenAIClient } = require("@azure/openai");
+const { DefaultAzureCredential } = require("@azure/identity");
 
 const openaiClient = new OpenAIApi(
   new Configuration({
@@ -46,6 +48,20 @@ const postMessage = async (channel, text, threadTs, context) => {
  */
 const createCompletion = async (messages, context) => {
   try {
+    const endpoint = "https://exa-dpf.openai.azure.com/";
+    const client = new OpenAIClient(endpoint, new DefaultAzureCredential());
+    const deploymentId = "gpt-35-turbo";
+    const events = client.listChatCompletions(deploymentId, messages, { maxTokens: 128 });
+    for await (const event of events) {
+      for (const choice of event.choices) {
+        const delta = choice.delta?.content;
+        if (delta !== undefined) {
+          context.log(`Chatbot: ${delta}`);
+        }
+      }
+    }
+
+
     const response = await openaiClient.createChatCompletion({
       messages: messages,
       max_tokens: 800,
