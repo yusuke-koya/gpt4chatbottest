@@ -11,7 +11,7 @@ const { OpenAIClient } = require("@azure/openai");
 const { DefaultAzureCredential } = require("@azure/identity");
 
 async function main(){
-  const endpoint = "https://exa-dpf.openai.azure.com/";
+  const endpoint = "https://exa-dpf-bee7dtd5frb4eggd.z01.azurefd.net/intrabot/webhook";
   const client = new OpenAIClient(endpoint, new DefaultAzureCredential());
 
   const deploymentId = "gpt-35-turbo";
