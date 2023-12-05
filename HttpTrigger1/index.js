@@ -74,7 +74,7 @@ async function testCompletions() {
     { role: "user", content: "Hello" },
   ];
 
-  const result = await client.getChatCompletions("exa-dpf", messages); //ここにモデル名
+  const result = await client.getChatCompletions("gpt-4", messages); //ここにモデル名
   let message;
   for (const choice of result.choices) {
     message = choice.message;
