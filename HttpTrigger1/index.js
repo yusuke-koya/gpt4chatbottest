@@ -80,7 +80,7 @@ async function testCompletions() {
     message = choice.message;
   }
 
-  context.log("message : " + message);
+  console.log("message : " + message);
   // context.res = {
   //   status: 200,
   //   body: { message: message },
