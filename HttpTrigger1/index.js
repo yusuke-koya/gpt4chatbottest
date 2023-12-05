@@ -1,23 +1,13 @@
 const { BlobServiceClient } = require("@azure/storage-blob");
 const { WebClient } = require("@slack/web-api");
-const {
-  ChatCompletionRequestMessageRoleEnum,
-  Configuration,
-  OpenAIApi,
-} = require("openai");
-
-const openaiClient = new OpenAIApi(
-  new Configuration({
-    apiKey: process.env.OPENAI_API_KEY,
-    basePath: process.env.OPENAI_API_URL + 'openai/deployments/' + process.env.OPENAI_DEPLOY_NAME,
-    baseOptions: {
-      headers: {'api-key': process.env.OPENAI_API_KEY},
-      params: {
-        'api-version': '2023-03-15-preview'
-      }
-    }
-  })
+const { ChatCompletionRequestMessageRoleEnum } = require("openai");
+const { OpenAIClient } = require("@azure/openai");
+const { DefaultAzureCredential } = require("@azure/identity");
+const client = new OpenAIClient(
+  process.env.OPENAI_API_URL, //ここにエンドポイント
+  new DefaultAzureCredential()
 );
+
 const slackClient = new WebClient(process.env.SLACK_BOT_TOKEN);
 const CHAT_GPT_SYSTEM_PROMPT = process.env.CHAT_GPT_SYSTEM_PROMPT;
 const GPT_THREAD_MAX_COUNT = process.env.GPT_THREAD_MAX_COUNT;
@@ -46,55 +36,20 @@ const postMessage = async (channel, text, threadTs, context) => {
  */
 const createCompletion = async (messages, context) => {
   try {
-    const response = await openaiClient.createChatCompletion({
-      messages: messages,
-      max_tokens: 800,
+    const result = await client.getChatCompletions(process.env.OPENAI_DEPLOY_NAME, messages, {
+      maxTokens: 800,
       temperature: 0.7,
-      frequency_penalty: 0,
-      presence_penalty: 0,
-      top_p: 0.95,
+      frequencyPenalty: 0,
+      presencePenalty: 0,
+      topP: 0.95,
     });
-    return response.data.choices[0].message.content;
+
+    return result.choices[0].message.content;
   } catch (err) {
     context.log.error(err);
     return err.response.statusText;
   }
 };
-
-async function testCompletions() {
-  const { OpenAIClient } = require("@azure/openai");
-  const { DefaultAzureCredential } = require("@azure/identity");
-  const client = new OpenAIClient(
-    "https://exa-dpf.openai.azure.com/", //ここにエンドポイント
-    new DefaultAzureCredential()
-  );
-
-  const messages = [
-    { role: "system", content: "You are an AI assistant." },
-    { role: "user", content: "Hello" },
-  ];
-
-  const result = await client.getChatCompletions("gpt-4", messages); //ここにモデル名
-  let message;
-  for (const choice of result.choices) {
-    message = choice.message;
-  }
-
-  for(let i in message) {
-    console.log("message(" + i + ") : " + message[i]);
-  }
-  console.log(JSON.stringify(message));
-  // context.res = {
-  //   status: 200,
-  //   body: { message: message },
-  //   headers: {
-  //     "Content-Type": "application/json",
-  //   },
-  // };
-}
-testCompletions().catch((err) => {
-  console.error("The sample encountered an error:", err);
-});
 
 module.exports = async function (context, req) {
   // Ignore retry requests
@@ -182,7 +137,7 @@ module.exports = async function (context, req) {
       if (botMessages.length < 1) {
         await postMessage(
           event.channel,
-          "[Bot]質問メッセージが見つかりませんでした。@koyabot2 を付けて質問してみて下さい。",
+          "[Bot]質問メッセージが見つかりませんでした。@gpt4chatbot を付けて質問してみて下さい。",
           threadTs,
           context
         );
