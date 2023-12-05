@@ -80,7 +80,10 @@ async function testCompletions() {
     message = choice.message;
   }
 
-  console.log("message : " + message);
+  for(let i in message) {
+    console.log("message(" + i + ") : " + message[i]);
+  }
+  console.log(JSON.stringify(message));
   // context.res = {
   //   status: 200,
   //   body: { message: message },
