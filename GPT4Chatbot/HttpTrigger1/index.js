@@ -67,7 +67,7 @@ module.exports = async function (context, req) {
   if (body.challenge) {
     context.log("Challenge: " + body.challenge);
     context.res = {
-      body: body//.challenge, // body: body にした方が良くないか
+      body: body//.challenge
     };
     return;
   }
